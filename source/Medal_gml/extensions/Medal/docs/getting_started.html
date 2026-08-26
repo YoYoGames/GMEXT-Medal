@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="img/favicon.ico" />
+    <title>Getting Started - GMEXT-Medal</title>
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+        <link href="assets/css/gmext_style.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Getting Started";
+        var mkdocs_page_input_path = "getting_started.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/gml.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="." class="icon icon-home"> GMEXT-Medal
+        </a>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Guides</span></p>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Getting Started</a>
+    <ul class="current">
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="extension_options.html">Extension Options</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">API</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="medal_api.html">Api</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="medal_schemas.html">Schemas</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href=".">GMEXT-Medal</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Guides</li>
+      <li class="breadcrumb-item active">Getting Started</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/YoYoGames/GMEXT-Medal/edit/master/docs/getting_started.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <p>This guide takes you from an empty project to a saved clip.</p>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li>The <strong>Medal desktop app</strong>, running on the machine the game runs on. The extension talks to a
+  listener on the local loopback, so nothing works without it.</li>
+<li>A <strong>Medal account</strong>, and your game recognised by Medal.</li>
+<li>A <strong>public key</strong> for your game.</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Because the API is served on localhost, a clip is only ever captured on a machine that has
+Medal installed and running. Calls on any other machine fail at the transport level rather than
+returning an HTTP error - see <em>Handling responses</em> below.</p>
+</div>
+<h2 id="1-get-a-public-key">1. Get a public key</h2>
+<p>Open the <a href="https://medal.tv/developer/auto-clipping">Medal Auto-Clipping developer page</a> and follow the
+<strong>Build your integration</strong> steps:</p>
+<ol>
+<li>Enter your Medal username. This is the account that receives the test build.</li>
+<li>Select your game from Medal's supported list, then give the app name and URL.</li>
+<li>Use <strong>Generate a public key</strong> to create the key for the integration.</li>
+<li>Define the events you want Medal to capture. Each gets an auto-assigned ID (<code>1</code>, <code>2</code>, <code>3</code>, ...),
+   and players can toggle individual events on or off in Medal's settings - so it pays to define more
+   than you think you need.</li>
+<li>Submit for a test build and continue through Medal's process as instructed on that page.</li>
+</ol>
+<blockquote>
+<p>Keep the public key associated with the same Medal integration and event configuration
+used when defining your events. The event IDs you send must match the ones you defined there.</p>
+</blockquote>
+<h2 id="2-configure-the-extension">2. Configure the extension</h2>
+<p>Open the <strong>Medal</strong> extension in the IDE and fill in its options - see <a href="extension_options.html">Extension Options</a> for
+all three. At minimum, paste your key into <strong>Public Key</strong>.</p>
+<h2 id="3-initialise">3. Initialise</h2>
+<p>Call <a href="home.html#medal_init">medal_init</a> once, before any other extension function. The first room's Create event
+is the usual place:</p>
+<div class="highlight"><pre><span></span><code>medal_init();
+</code></pre></div>
+<p>It returns <code>false</code> and logs a message if the <strong>Public Key</strong> option is empty, which is worth checking
+during development:</p>
+<div class="highlight"><pre><span></span><code>if (!medal_init()) {
+    show_debug_message(&quot;Medal is not configured; clip events will fail.&quot;);
+}
+</code></pre></div>
+<h2 id="4-report-an-event">4. Report an event</h2>
+<p>Call <a href="medal_api.html#medal_event_invoke">medal_event_invoke</a> at the moment worth clipping, passing a
+<a href="medal_schemas.html#medaleventinvokerequest">MedalEventInvokeRequest</a>:</p>
+<div class="highlight"><pre><span></span><code>medal_event_invoke(
+    new MedalEventInvokeRequest(
+        &quot;1&quot;,                              // event ID, as defined in Medal
+        &quot;Triple Kill&quot;,                    // title shown on the clip card
+        [&quot;SaveClip&quot;],                     // actions Medal should perform
+        new MedalClipOptions(30, 5000)    // 30s clip, captured 5000ms after the event
+    ),
+    function(_status, _data, _request) {
+        show_debug_message(&quot;Medal replied &quot; + string(_status));
+    }
+);
+</code></pre></div>
+<p>That sends the following body to <code>http://localhost:12665/api/v1/event/invoke</code>, with your key in the
+<code>publicKey</code> header:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;eventId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;eventName&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Triple Kill&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;triggerActions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;SaveClip&quot;</span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;clipOptions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">30</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;captureDelayMs&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">5000</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><code>captureDelayMs</code> is how long Medal waits after the request before snapshotting the replay buffer,
+which is useful for catching a killcam or another moment that happens just after the trigger.</p>
+<h2 id="5-handle-the-response">5. Handle the response</h2>
+<p>The callback receives <code>(status, data, request)</code>. <code>status</code> is the HTTP status code, <strong>or a negative
+value when the request never reached a server at all</strong> - which is what you get when the Medal desktop
+app is not running, and is the most likely failure in practice.</p>
+<div class="highlight"><pre><span></span><code>function(_status, _data, _request) {
+    if (_status &lt; 0) {
+        // No connection: Medal is probably not running.
+        show_debug_message(&quot;Medal is not reachable.&quot;);
+        return;
+    }
+
+    if (_status &gt;= 200 &amp;&amp; _status &lt; 300) {
+        // Accepted. The clip is still being processed.
+        return;
+    }
+
+    if (_status == 401) {
+        show_debug_message(&quot;Medal rejected the public key - check the Public Key option.&quot;);
+        return;
+    }
+
+    show_debug_message(&quot;Medal error &quot; + string(_status) + &quot;: &quot; + string(_data));
+}
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Status</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>200</code></td>
+<td>The event was accepted.</td>
+</tr>
+<tr>
+<td><code>400</code></td>
+<td>A required field is missing or malformed.</td>
+</tr>
+<tr>
+<td><code>401</code></td>
+<td>The public key is missing or unrecognised.</td>
+</tr>
+<tr>
+<td>negative</td>
+<td>The request never reached Medal - the app is not running, or the port is blocked.</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>A <code>200</code> means Medal <strong>accepted</strong> the event, not that the clip exists yet. Medal processes
+it asynchronously and the clip appears in the player's library once the configured duration has
+elapsed.</p>
+</blockquote>
+<h2 id="cleanup">Cleanup</h2>
+<p>None required. The extension creates a persistent controller object on first use and tears down its
+own state when the game ends.</p>
+<h2 id="testing-notes">Testing notes</h2>
+<ul>
+<li>Run the Medal desktop app before testing, or every call returns a negative status.</li>
+<li>Medal only captures for the <strong>active game</strong> it recognises. If events are accepted but no clip
+  appears, that is usually the cause rather than anything in your code.</li>
+<li>Turn on the <strong>Debug Logging</strong> option to print every HTTP response to the output window.</li>
+</ul>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="extension_options.html" class="btn btn-neutral float-right" title="Extension Options">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p><p align="center">GameMaker 2026</p></p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/YoYoGames/GMEXT-Medal" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+    
+      <span><a href="extension_options.html" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = ".";</script>
+    <script src="js/theme_extra.js"></script>
+    <script src="js/theme.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/gml.min.js"></script>
+      <script src="assets/js/gmext_script.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

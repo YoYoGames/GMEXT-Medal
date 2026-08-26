@@ -1,0 +1,5 @@
+source/Medal_gml/options/
+output/
+cache/
+.DS_Store
+*.user

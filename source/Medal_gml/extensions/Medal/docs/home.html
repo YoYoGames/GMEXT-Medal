@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="img/favicon.ico" />
+    <title>Home - GMEXT-Medal</title>
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+        <link href="assets/css/gmext_style.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Home";
+        var mkdocs_page_input_path = "home.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/gml.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="." class="icon icon-home"> GMEXT-Medal
+        </a>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Guides</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="extension_options.html">Extension Options</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">API</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="medal_api.html">Api</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="medal_schemas.html">Schemas</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href=".">GMEXT-Medal</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Home</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/YoYoGames/GMEXT-Medal/edit/master/docs/home.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <p><a id="top"></a></p>
+<h1 id="medal"><strong>Medal</strong></h1>
+<p>The Medal extension integrates GameMaker with Medal's local auto-clipping API.</p>
+<p>Report an in-game event worth clipping - a multi-kill, a boss defeat, a race win - and the Medal
+desktop app saves a highlight from its replay buffer, titled with your event name and dropped into
+the player's library.</p>
+<p>The request goes to Medal's listener on the player's own machine, so there is no round trip to a
+remote server and no SDK to integrate.</p>
+<h2 id="getting-started">Getting started</h2>
+<p>See <a href="getting_started.html">Getting Started</a> for the full walkthrough, and <a href="extension_options.html">Extension Options</a> for the three
+options this extension exposes.</p>
+<p>In short: set the <strong>Public Key</strong> option, call <a href="home.html#medal_init">medal_init</a> once, then call
+<a href="medal_api.html#medal_event_invoke">medal_event_invoke</a> whenever something clip-worthy happens.</p>
+<h2 id="the-generated-client">The generated client</h2>
+<p>The functions and structs under <a href="medal_api.html">Api</a> and <a href="medal_schemas.html">Schemas</a> are <strong>generated</strong>
+from an OpenAPI specification checked into the repository at <code>spec/</code>. They are not hand-written, and
+a fix belongs in the specification or the generator rather than in the generated GML.</p>
+<p><a href="home.html#medal_init">medal_init</a> is the one hand-written function, and exists because a specification cannot
+describe where a credential comes from.</p>
+<blockquote>
+<p>A successful response means Medal accepted the event request. It does not mean the
+resulting clip has already finished processing - that happens asynchronously, and the clip appears
+in the player's library after the configured duration has elapsed.</p>
+</blockquote>
+<h2 id="functions">Functions</h2>
+<p>The hand-written entry point:</p>
+<ul>
+<li><a href="home.html#medal_init">medal_init</a></li>
+</ul>
+<h2 id="modules">Modules</h2>
+<p>The generated API surface - one page for the endpoint functions, one for the structs they
+exchange. Both are generated from the OpenAPI specification.</p>
+<ul>
+<li><a href="medal_api.html">Api</a></li>
+<li><a href="medal_schemas.html">Schemas</a></li>
+</ul>
+<p><br></p>
+<hr />
+<p align="right"><a href="#top">Back To Top</a></p>
+
+<h1 id="medal_init">medal_init</h1>
+<p>Hands the <strong>Public Key</strong> extension option to the generated client, which then sends it as the
+<code>publicKey</code> header on every request.</p>
+<p>Call this once before your first <a href="medal_api.html#medal_event_invoke">medal_event_invoke</a> - the first room's Create event is
+the usual place. If the option is empty the function writes a message to the debug output and
+returns <code>false</code>; without a key, every request comes back <code>401</code>.</p>
+<p>This is the only hand-written function in the extension. It exists because an OpenAPI specification
+cannot express where a credential comes from, and Medal's key is static configuration rather than
+something obtained at runtime.</p>
+<p><br></p>
+<p><strong>Syntax:</strong></p>
+<blockquote>
+<div class="highlight"><pre><span></span><code>medal_init()
+</code></pre></div>
+</blockquote>
+<p><br></p>
+<p><strong>Returns:</strong></p>
+<blockquote>
+<p><a href="https://manual.gamemaker.io/monthly/en/GameMaker_Language/GML_Overview/Data_Types.htm">Boolean</a></p>
+</blockquote>
+<p>Whether a non-empty public key was configured.</p>
+<p><br></p>
+<p><strong>Example:</strong></p>
+<div class="highlight"><pre><span></span><code>if (!medal_init()) {
+    show_debug_message(&quot;Medal is not configured; clip events will fail.&quot;);
+}
+</code></pre></div>
+<p><br></p>
+<hr />
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+      <p><p align="center">GameMaker 2026</p></p>
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/YoYoGames/GMEXT-Medal" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+    
+  </span>
+</div>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = ".";</script>
+    <script src="js/theme_extra.js"></script>
+    <script src="js/theme.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/gml.min.js"></script>
+      <script src="assets/js/gmext_script.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

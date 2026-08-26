@@ -1,0 +1,108 @@
+openapi: 3.0.3
+
+info:
+  title: Medal Local Game API
+  version: "1.0.0"
+  description: >-
+    Medal's local auto-clipping API. The Medal desktop app listens on the player's own machine and
+    saves a highlight from its replay buffer when a game reports a clip-worthy event.
+
+
+    Authored by hand: Medal publishes no OpenAPI document, and retired its developer documentation
+    during 2026. Every field below is transcribed from the one surviving page,
+    https://medal.tv/developer/auto-clipping, which states "Single endpoint". Do not add operations
+    or properties from the older docs without confirming them with Medal first.
+
+servers:
+  - url: http://localhost:12665
+    description: >-
+      The Medal desktop app's loopback listener. Ignored by the code generator by design - the base
+      URL is read from the extension option so it stays configurable, and this entry documents the
+      default rather than fixing it.
+
+security:
+  - publicKey: []
+
+paths:
+  /api/v1/event/invoke:
+    post:
+      operationId: eventInvoke
+      summary: Report a clip-worthy game event
+      description: >-
+        Tells Medal that something worth clipping just happened. A 200 means Medal accepted the
+        event; the clip itself is processed asynchronously and appears in the player's library after
+        the configured duration has elapsed.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EventInvokeRequest"
+      responses:
+        "200":
+          description: The event was accepted. The clip is processed asynchronously.
+        "400":
+          description: A required field is missing or malformed.
+        "401":
+          description: The publicKey header is missing or unrecognized.
+
+components:
+  securitySchemes:
+    publicKey:
+      type: apiKey
+      in: header
+      name: publicKey
+      description: >-
+        The public key generated for the game at https://medal.tv/developer/auto-clipping. Sent on
+        every request. The extension supplies it from its PublicKey option.
+
+  schemas:
+    EventInvokeRequest:
+      type: object
+      description: The body of a clip-worthy game event.
+      required:
+        - eventId
+        - eventName
+        - triggerActions
+        - clipOptions
+      properties:
+        eventId:
+          type: string
+          description: >-
+            The numeric ID assigned to this event, as a string (for example "1"). Medal uses it to
+            let players toggle individual events on or off.
+          example: "1"
+        eventName:
+          type: string
+          description: >-
+            Display name used to label the clip card in Medal.
+          example: Triple Kill
+        triggerActions:
+          type: array
+          description: >-
+            The actions Medal should perform for this event. Use ["SaveClip"] to record and save a
+            highlight.
+          items:
+            type: string
+          example:
+            - SaveClip
+        clipOptions:
+          $ref: "#/components/schemas/ClipOptions"
+
+    ClipOptions:
+      type: object
+      description: How Medal should capture the clip for this event.
+      required:
+        - duration
+      properties:
+        duration:
+          type: number
+          description: >-
+            Length of the saved clip in seconds. Medal documents a typical range of 15 to 60.
+          example: 30
+        captureDelayMs:
+          type: number
+          description: >-
+            Milliseconds Medal waits after the request before snapshotting the replay buffer. Useful
+            for catching a killcam or another post-action moment.
+          example: 1000

@@ -1,0 +1,49 @@
+{
+  "$schema": "./openapigen.schema.json",
+  "input": "./medal-openapi.yaml",
+  "root": "../",
+  "prefix": "medal",
+  "requireOperationId": true,
+  "code": {
+    "endPoints": {
+      "outputFile": "./source/Medal_gml/scripts/medal_api/medal_api.gml",
+      "enabled": true
+    },
+    "schemas": {
+      "outputFile": "./source/Medal_gml/scripts/medal_schemas/medal_schemas.gml",
+      "enabled": true
+    },
+    "helpers": {
+      "outputFile": "./source/Medal_gml/scripts/medal_helpers/medal_helpers.gml",
+      "enabled": true
+    }
+  },
+  "controller": {
+    "createEvent": {
+      "outputFile": "./source/Medal_gml/objects/obj_medal_core/Create_0.gml",
+      "enabled": true
+    },
+    "cleanupEvent": {
+      "outputFile": "./source/Medal_gml/objects/obj_medal_core/CleanUp_0.gml",
+      "enabled": true
+    },
+    "httpAsyncEvent": {
+      "outputFile": "./source/Medal_gml/objects/obj_medal_core/Other_62.gml",
+      "enabled": true
+    }
+  },
+  "docs": {
+    "schemas": {
+      "outputFile": "./docs/schemas_codegen.js",
+      "enabled": true
+    },
+    "functions": {
+      "outputFile": "./docs/function_codegen.js",
+      "enabled": true
+    },
+    "modules": {
+      "outputFile": "./docs/modules_codegen.js",
+      "enabled": true
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+    "gitHubUrl": "https://github.com/YoYoGames/GMEXT-Medal",
+    "projectFile": "source/Medal_gml/Medal.yyp",
+    "projectVersion": "LTS22",
+    "releaseTemplate": "templates/release_body.md",
+    "documentationFolder": null,
+    "extensionMetaData": [
+        {
+            "extensionFile": "source/Medal_gml/extensions/Medal/Medal.yy",
+            "packageId": "com.yoyogames.medalext",
+            "packageName": "Medal Ext",
+            "packageVersion": "1.0.0",
+            "packageFormat": "LTS22",
+            "includeFolders": null,
+            "includeResources": null,
+            "excludeFolders": null,
+            "excludeResources": null,
+            "postRemovals": []
+        }
+    ]
+}

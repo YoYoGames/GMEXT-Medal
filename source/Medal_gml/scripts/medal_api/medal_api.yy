@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"medal_api",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"medal_api",
+  "parent":{
+    "name":"Medal",
+    "path":"folders/Medal.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}
