@@ -3,7 +3,6 @@
     "projectFile": "source/Medal_gml/Medal.yyp",
     "projectVersion": "LTS22",
     "releaseTemplate": "templates/release_body.md",
-    "documentationFolder": null,
     "extensionMetaData": [
         {
             "extensionFile": "source/Medal_gml/extensions/Medal/Medal.yy",
@@ -17,5 +16,6 @@
             "excludeResources": null,
             "postRemovals": []
         }
-    ]
+    ],
+    "documentationFolder": null
 }
